@@ -1,0 +1,690 @@
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        
+        <title>JSP Page</title>
+        <link rel="StyleSheet" href="./style1.css">
+        <script>
+            function retreiveData(showLocation, page, params) {
+                showLocation.innerHTML = "<font color='maroon'>Please wait...</font>";
+                var xmlHttp = null;
+                try
+                {  // Firefox, Opera 8.0+, Safari
+                    xmlHttp = new XMLHttpRequest();
+                } catch (e)
+                {  // Internet Explorer
+                    try
+                    {
+                        xmlHttp = null
+                        xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch (e)
+                    {
+                        try
+                        {
+                            xmlHttp = null;
+                            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                        } catch (e)
+                        {
+                            alert("Your browser does not support AJAX!");
+                            return false;
+                        }
+                    }
+                }
+
+                xmlHttp.onreadystatechange = function ()
+                {
+                    if (xmlHttp.readyState == 4)
+                    {
+                        if (xmlHttp.status == 200) {
+                            showLocation.innerHTML = xmlHttp.responseText;
+                            showLocation.style.display = '';
+                            hideElements('input');
+                            //hideElements('BUTTON');
+                            if (typeof parent.setFrameWH != 'undefined' && parent.setFrameWH != null)
+                                parent.setFrameWH();
+                        } else if (xmlHttp.status == 500) {
+                            alert('Please press reset button');
+                        }
+                    }
+                }
+                xmlHttp.open("POST", page, true);
+                xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlHttp.setRequestHeader("Content-length", params.length);
+                xmlHttp.setRequestHeader("Connection", "close");
+                xmlHttp.send(params);
+
+            }
+            function hideElements(tagName) {
+                var elList = document.getElementsByTagName(tagName);
+                for (var i = 0; i < elList.length; i++) {
+                    elList[i].style.display = 'none';
+                }
+            }
+
+
+        </script>
+    </head>
+    <body>
+        
+
+              
+            <hr>
+            <table width="100%" align="center">
+                <tbody><tr>
+                    <td id="showDetails" width="100%" align="center">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+        <title>JSP Page</title>
+        
+        <link rel="StyleSheet" href="./style1.css">
+        <script language="" type="">
+            function printInfo(elementid,styleSheetHref){
+                var prtContent="<html><head>";
+                if(typeof styleSheetHref != 'undefined'){
+                    prtContent+="<link rel='StyleSheet' href='"+styleSheetHref+"' />";
+                }
+                prtContent+="</head><body>";
+                prtContent+=document.getElementById(elementid).innerHTML;
+                prtContent+="</body>";
+                //alert(prtContent);
+                var WinPrint =window.open('','','left=0,top=0,width=1,height=1,toolbar=0,scrollbars=0,status=0');
+                WinPrint.document.write(prtContent);
+                WinPrint.document.close();
+                WinPrint.focus();
+                WinPrint.print();
+                WinPrint.close();
+            }
+            
+            
+            function ajaxValidateDigisign()
+            {
+                var xmlHttp;
+                try
+                {  // Firefox, Opera 8.0+, Safari
+                    xmlHttp=new XMLHttpRequest();
+                }
+                catch (e)
+                {  // Internet Explorer
+                    try
+                    {
+                        xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+                    }
+                    catch (e)
+                    {
+                        try
+                        {
+                            xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+                        }
+                        catch (e)
+                        {
+                            alert("Your browser does not support AJAX!");
+                            return false;
+                        }
+                    }
+                }
+
+                if(document.getElementById('alias').value != "" && document.getElementById('passphrase').value != "")
+                {
+                    xmlHttp.open("GET","validateAliasPassPhrasePerformance.jsp?alias="+encodeURIComponent(document.getElementById('alias').value)+"&alias_password="+encodeURIComponent(document.getElementById('passphrase').value)+"&rand_id="+Math.round(Math.random()*1000),true);
+                    xmlHttp.onreadystatechange = function(){
+                        if(xmlHttp.readyState==4){
+                            if(xmlHttp.status==200)
+                            {
+                                var returnStr = xmlHttp.responseText.match("valid");
+                                //alert(returnStr);
+                                if(returnStr == "valid")
+                                {
+                                    document.getElementById('digiSignRight').style.display='';
+                                    document.getElementById('digiSignRight').style.width='20px';
+                                    document.getElementById('digiSignRight').style.height='15px';
+                                    document.getElementById('digiSignCross').style.display='none';
+                                    document.getElementById('alias').readOnly = true;
+                                    document.getElementById('alias').className = "ReadOnlyBGColor"
+                                    document.getElementById('passphrase').readOnly = true;
+                                    document.getElementById('passphrase').className = "ReadOnlyBGColor"
+                                }
+                                else
+                                {
+                                    document.getElementById('digiSignRight').style.display='none';
+                                    document.getElementById('digiSignCross').style.display='';
+                                    document.getElementById('digiSignCross').style.width='20px';
+                                    document.getElementById('digiSignCross').style.height='15px';
+                                    document.getElementById('alias').focus();
+                                }
+                            }
+                        }
+                    }
+                    xmlHttp.send(null);
+                }
+                else
+                {
+                    if(document.getElementById('alias').value == "")
+                    {
+                        document.getElementById('alias').focus();
+                    }
+                    else if(document.getElementById('passphrase').value == "")
+                    {
+                        document.getElementById('passphrase').focus();
+                    }
+                }
+            }
+            
+            function getPerformance(obj){
+                var alias=document.getElementById('alias').value;
+                var pass_p=document.getElementById('passphrase').value;
+                var dgsign_stat=document.getElementById('digiSignRight').style.display;
+                //if(alias!=null && pass_p!=null) {
+                if(alias!=''&& pass_p!=''&& alias!='undefined'&& pass_p!='undefined'){
+                    var conff = confirm('Are you sure, you want to get performance cards?');
+                   if(conff){
+                        dgsign_stat=document.getElementById('digiSignRight').style.display;
+                        if(alias!=''&& pass_p!=''&& alias!='undefined'&& pass_p!='undefined' && dgsign_stat==''){
+                            document.getElementById('overallPerformanceReportPG').submit();
+                            return true;
+                            //alert('done.........');
+                           // showdiv('waitDiv',obj,'show','');
+                        }else{
+                            document.getElementById('alias').focus();
+                            alert('Please give correct alias and passphrase to get the performance card.');
+                        }
+                    }
+                } else {
+                    alert('Please give correct alias and passphrase to get the performance card.');
+                    return false;
+                }
+                
+            }
+        </script>
+    
+    
+        
+        <table><tbody><tr><td><input type="button" class="button" value="PRINT" onclick="printInfo(&#39;printIt&#39;,&#39;css/style1.css&#39;)" style="display: none;"></td></tr></tbody></table>
+        <div id="printIt">
+            
+        <table><tbody><tr><td>
+                    <fieldset>
+                        <table align="center" width="100%" bgcolor="#8D8D89">
+                            <tbody><tr>
+                                <td align="center">
+                                    <font color="white">
+                                        <b>Rollno : 19MM60011</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <b>Name: NAVEEN KUMAR R</b>
+                                    </font>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <font color="white"><b>Department: SCHOOL OF MEDICAL SCIENCE &amp; TECHNOLOGY</b></font>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <font color="white"><b>Course: MEDICAL SCIENCE AND TECHNOLOGY</b></font>
+                                    
+                                </td>
+                            </tr>
+                        </tbody></table>
+                        <table width="100%">
+                            <tbody><tr>
+                                <td><b>*SCT : Semester Credit Taken</b></td>
+                                <td><b>*SCC : Semester Credit Cleared</b></td>
+                                <td><b>*TCT : Total Credit Taken</b></td>
+                                <td><b>*TCC : Total Credit Cleared</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" align="center" bgcolor="black"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" align="center">
+                                    <table>
+                                        <tbody><tr>
+                                            <td width="10px" style="border: 2px black solid" bgcolor="pink">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td><b>Backlog subjects</b>&nbsp;&nbsp;</td>
+                                            <td width="10px" style="border: 2px black solid" bgcolor="yellow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td><b>Subjects registered in this semester</b></td>
+                                        </tr>
+                                    </tbody></table>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" align="center" bgcolor="black"></td>
+                            </tr>
+                        </tbody></table>
+
+                        
+
+
+
+                        <table border="0" width="100%">
+                            <tbody><tr>
+                                <td align="left" valign="top">
+                                    <u><b>Semester 1</b></u><table border="0" cellpadding="2" cellspacing="2">
+                                        <tbody><tr bgcolor="#8D8D89">
+                                            <td><font color="white"><b>Subno</b></font></td>
+                                            <td><font color="white"><b>Name</b></font></td>
+                                            <td><font color="white"><b>Type</b></font></td>
+                                            <td><font color="white"><b>L-T-P</b></font></td>
+                                            <td><font color="white"><b>CRD</b></font></td>
+                                            <td><font color="white"><b>GRD</b></font></td>
+                                        </tr>
+                                        
+                                        
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>BT69003</b></td>
+                                            <td align="left">ANIMAL CELL CULTURE &amp;  IMMUNOTECHNOLOGY LABORATORY</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-3</td>
+                                            <td align="center">2</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>CE69091</b></td>
+                                            <td align="left">CAD &amp; VISUALISATION</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-3</td>
+                                            <td align="center">2</td>
+                                            <td align="center"><b>C</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>CS60013</b></td>
+                                            <td align="left">PROGRAMMING AND DATA STRUCTURES</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>CS69013</b></td>
+                                            <td align="left">PROGRAMMING AND DATA STRUCTURES LAB</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-3</td>
+                                            <td align="center">2</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM61311</b></td>
+                                            <td align="left">QUANTITATIVE TECHNIQUES IN MEDICINE</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM61313</b></td>
+                                            <td align="left">MEDICAL BIOTECHNOLOGY</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM61317</b></td>
+                                            <td align="left">BIOLOGICAL PHYSICS</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-0-0</td>
+                                            <td align="center">3</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM60017</b></td>
+                                            <td align="left">EVIDENCE BASED MEDICINE</td>
+                                            <td align="left">ELECTIVE</td>
+                                            <td align="center">3-0-0</td>
+                                            <td align="center">3</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                    </tbody></table>
+
+                                    <table align="center" border="0" width="100%" cellpadding="0" cellspacing="0"><tbody><tr><td>
+
+                                                <table align="center" width="100%" border="0" cellpadding="3" cellspacing="1"> 
+                                                    
+                                                    <tbody><tr bgcolor="#C1C1C3">
+                                                        <td nowrap=""><b>SCT: 24</b></td>
+                                                        <td nowrap=""><b>SCC: 24</b></td>
+                                                        <td nowrap=""><b>SGPA: 9.25</b></td>
+                                                        <td nowrap=""><b>ASCT: 0</b></td>
+                                                        <td nowrap=""><b>ASCC: 0</b></td>
+                                                        <td nowrap=""><b>ASGPA: 0.00</b></td>
+                                                    </tr>
+                                                    <tr bgcolor="#C1C1C3">
+                                                        <td nowrap=""><b>TCT: 24</b></td>
+                                                        <td nowrap=""><b>TCC: 24</b></td>
+                                                        <td nowrap=""><b>CGPA: 9.25</b></td>
+                                                        <td nowrap=""><b>ATCT: 0</b></td>
+                                                        <td nowrap=""><b>ATCC: 0</b></td>
+                                                        <td nowrap=""><b>ACGPA: 0.00</b></td>
+                                                    </tr>
+                                                    
+                                                </tbody></table>
+
+                                            </td></tr>
+                                    </tbody></table>
+                                </td>
+                                
+                                <td align="left" valign="top">
+                                    <u><b>Semester 2</b></u><table border="0" cellpadding="2" cellspacing="2" width="100%">
+                                        <tbody><tr bgcolor="#8D8D89">
+                                            <td><font color="white"><b>Subno</b></font></td>
+                                            <td><font color="white"><b>Name</b></font></td>
+                                            <td><font color="white"><b>Type</b></font></td>
+                                            <td><font color="white"><b>L-T-P</b></font></td>
+                                            <td><font color="white"><b>CRD</b></font></td>
+                                            <td><font color="white"><b>GRD</b></font></td>
+                                        </tr>
+                                        
+                                        
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM66005</b></td>
+                                            <td align="left">COMPUTATIONAL PATHOLOGY</td>
+                                            <td align="left">Additional</td>
+                                            <td align="center">0-0-0</td>
+                                            <td align="center">1</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM66008</b></td>
+                                            <td align="left">BIOSAFETY</td>
+                                            <td align="left">Additional</td>
+                                            <td align="center">0-0-0</td>
+                                            <td align="center">1</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM61312</b></td>
+                                            <td align="left">MEDICAL IMAGING</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM61314</b></td>
+                                            <td align="left">TRANSLATIONAL HEALTH RESEARCH</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-0-0</td>
+                                            <td align="center">3</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM61316</b></td>
+                                            <td align="left">BIOMATERIALS</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM61318</b></td>
+                                            <td align="left">MEDICAL ELECTRONICS</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-0-0</td>
+                                            <td align="center">3</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM69320</b></td>
+                                            <td align="left">MEDICAL ELECTRONICS LAB</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-3</td>
+                                            <td align="center">2</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM69322</b></td>
+                                            <td align="left">BIOMATERIALS LAB</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-3</td>
+                                            <td align="center">2</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>MM69324</b></td>
+                                            <td align="left">SEMINAR I</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-3</td>
+                                            <td align="center">2</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="#E5E5E9">
+                                            <td><b>BT60002</b></td>
+                                            <td align="left">RECOMBINANT DNA TECHNOLOGY</td>
+                                            <td align="left">ELECTIVE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                    </tbody></table>
+
+                                    <table align="center" border="0" width="100%" cellpadding="0" cellspacing="0"><tbody><tr><td>
+
+                                                <table align="center" width="100%" border="0" cellpadding="3" cellspacing="1"> 
+                                                    
+                                                    <tbody><tr bgcolor="#C1C1C3">
+                                                        <td nowrap=""><b>SCT: 24</b></td>
+                                                        <td nowrap=""><b>SCC: 24</b></td>
+                                                        <td nowrap=""><b>SGPA: 9.83</b></td>
+                                                        <td nowrap=""><b>ASCT: 2</b></td>
+                                                        <td nowrap=""><b>ASCC: 2</b></td>
+                                                        <td nowrap=""><b>ASGPA: 9.50</b></td>
+                                                    </tr>
+                                                    <tr bgcolor="#C1C1C3">
+                                                        <td nowrap=""><b>TCT: 48</b></td>
+                                                        <td nowrap=""><b>TCC: 48</b></td>
+                                                        <td nowrap=""><b>CGPA: 9.54</b></td>
+                                                        <td nowrap=""><b>ATCT: 2</b></td>
+                                                        <td nowrap=""><b>ATCC: 2</b></td>
+                                                        <td nowrap=""><b>ACGPA: 9.50</b></td>
+                                                    </tr>
+                                                    
+                                                </tbody></table>
+
+                                            </td></tr>
+                                    </tbody></table>
+                                </td>
+                                
+                            </tr><tr><td colspan="3"><hr></td></tr><tr>
+                                    
+                                <td align="left" valign="top">
+                                    <u><b>Semester 3</b></u><table border="0" cellpadding="2" cellspacing="2" width="100%">
+                                        <tbody><tr bgcolor="#8D8D89">
+                                            <td><font color="white"><b>Subno</b></font></td>
+                                            <td><font color="white"><b>Name</b></font></td>
+                                            <td><font color="white"><b>Type</b></font></td>
+                                            <td><font color="white"><b>L-T-P</b></font></td>
+                                            <td><font color="white"><b>CRD</b></font></td>
+                                            <td><font color="white"><b>GRD</b></font></td>
+                                        </tr>
+                                        
+                                        
+                                        
+                                        <tr bgcolor="yellow">
+                                            <td><b>MM71315</b></td>
+                                            <td align="left">FUNDAMENTALS OF MEDICAL INSTRUMENTS</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="yellow">
+                                            <td><b>MM77319</b></td>
+                                            <td align="left">MINOR PROJECT-I</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-6</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="yellow">
+                                            <td><b>MM79317</b></td>
+                                            <td align="left">MEDICAL INSTRUMENTATION LAB</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-3</td>
+                                            <td align="center">2</td>
+                                            <td align="center"><b>I</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="yellow">
+                                            <td><b>MM79325</b></td>
+                                            <td align="left">SEMINAR-II</td>
+                                            <td align="left">CORE</td>
+                                            <td align="center">0-0-3</td>
+                                            <td align="center">2</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="yellow">
+                                            <td><b>EE60094</b></td>
+                                            <td align="left">BIOMEDICAL SIGNAL PROCESSING</td>
+                                            <td align="left">ELECTIVE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="yellow">
+                                            <td><b>MM61215</b></td>
+                                            <td align="left">ANIMAL TRANSGENIC TECHNOLOGIES</td>
+                                            <td align="left">ELECTIVE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>A</b></td>
+                                        </tr>
+
+
+                                        
+                                        <tr bgcolor="yellow">
+                                            <td><b>MM61509</b></td>
+                                            <td align="left">MEMS &amp; BIOSENSORS</td>
+                                            <td align="left">ELECTIVE</td>
+                                            <td align="center">3-1-0</td>
+                                            <td align="center">4</td>
+                                            <td align="center"><b>EX</b></td>
+                                        </tr>
+
+
+                                        
+                                    </tbody></table>
+                                    <table align="center" border="0" width="100%" cellpadding="0" cellspacing="0"><tbody><tr><td>
+
+                                                <table align="center" width="100%" border="0" cellpadding="3" cellspacing="1">
+                                                    
+                                                    <tbody><tr bgcolor="#C1C1C3">
+                                                        <td nowrap=""><b>SCT: 22</b></td>
+                                                        <td nowrap=""><b>SCC: 22</b></td>
+                                                        <td nowrap=""><b>SGPA: 9.55</b></td>
+                                                    </tr>
+                                                    <tr bgcolor="#C1C1C3">
+                                                        <td nowrap=""><b>TCT: 70</b></td>
+                                                        <td nowrap=""><b>TCC: 70</b></td>
+                                                        <td nowrap=""><b>CGPA: 9.54</b></td>
+                                                    </tr>
+                                                    
+                                                </tbody></table>
+                                            </td></tr>
+                                    </tbody></table>
+                                </td>
+                            </tr>
+                            <tr><td colspan="3"> <hr> </td></tr>
+                            <tr><td colspan="3" align="center"> <input type="button" class="button" value="CLOSE" onclick="window.close();" style="display: none;"> </td></tr>
+                        </tbody></table>
+                        
+                        
+                        
+
+                        
+
+                    </fieldset>
+                </td></tr></tbody></table>
+                        </div>
+
+        
+        
+        </form>
+    
+
+</td>
+                </tr>
+            </tbody></table>
+        </fieldset>
+    
+</body></html>
