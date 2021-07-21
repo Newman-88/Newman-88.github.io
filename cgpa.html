@@ -34,24 +34,7 @@
                 {
                     if (xmlHttp.readyState == 4)
                     {
-                        if (xmlHttp.status == 200) {
-                            showLocation.innerHTML = xmlHttp.responseText;
-                            showLocation.style.display = '';
-                            hideElements('input');
-                            //hideElements('BUTTON');
-                            if (typeof parent.setFrameWH != 'undefined' && parent.setFrameWH != null)
-                                parent.setFrameWH();
-                        } else if (xmlHttp.status == 500) {
-                            alert('Please press reset button');
-                        }
-                    }
-                }
-                xmlHttp.open("POST", page, true);
-                xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xmlHttp.setRequestHeader("Content-length", params.length);
-                xmlHttp.setRequestHeader("Connection", "close");
-                xmlHttp.send(params);
-
+                  
             }
             function hideElements(tagName) {
                 var elList = document.getElementsByTagName(tagName);
